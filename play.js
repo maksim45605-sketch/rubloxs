@@ -1,56 +1,68 @@
 
-let user=localStorage.getItem("rublox_user")||("Guest"+Math.floor(Math.random()*9999));
-localStorage.setItem("rublox_user",user);
+const session=getSession(); if(!session) location.href="/login";
+const gameId=new URLSearchParams(location.search).get("game")||"1";
+const game=games.find(g=>g.id===gameId)||games[0];
+gameName.textContent=game.title;
+if(game.slug==="parkour"){world.classList.add("parkour"); for(let i=0;i<6;i++){const b=document.createElement("div");b.className="parkour-block";b.style.left=(20+i*12)+"%";b.style.top=(65-i*6)+"%";b.style.width="110px";b.style.height="28px";world.appendChild(b)}}
 
-const bad=["бля","хуй","fuck","сука","еб","нах"];
-function filterText(t){
- let low=t.toLowerCase();
- for(let b of bad){
-   if(low.includes(b)) return "#".repeat(t.length);
- }
- return t;
+const bad=["бля","блять","хуй","сука","еб","пизд","fuck"];
+function filterText(t){let low=t.toLowerCase();return bad.some(b=>low.includes(b))?"#".repeat(t.length):t}
+
+let me={id:session.username+"_"+Date.now(),nick:session.nick,username:session.username,x:50,y:52,z:0,msg:"",time:Date.now()};
+let vy=0,jumping=false;
+
+function saveMe(){
+ let list=getOnline(gameId).filter(p=>p.id!==me.id);
+ me.time=Date.now();
+ list.push(me);
+ localStorage.setItem("rublox_online_"+gameId,JSON.stringify(list));
 }
+function makePlayer(p,isMe){
+ return `<div class="player3d" style="left:${p.x}%;top:${p.y-p.z}%" data-id="${p.id}">
+ <div class="pname">${p.nick}</div><div class="bubble" style="${p.msg?'display:block':''}">${p.msg||''}</div><div class="phead"></div><div class="pbody"></div><div class="pleg l"></div><div class="pleg r"></div></div>`;
+}
+function renderPlayers(){
+ const list=getOnline(gameId);
+ playersLayer.innerHTML=list.map(p=>makePlayer(p,p.id===me.id)).join("");
+ playersTop.innerHTML=`<div class="player-mini">🟢 Онлайн: ${list.length}</div>`;
+ tabPlayers.innerHTML=list.map(p=>`<div class="player-list-row"><b>${p.nick}</b><button onclick="alert('UserName: @${p.username}')">UserName</button></div>`).join("");
+}
+function loop(){
+ if(jumping){me.z+=vy;vy-=1.3;if(me.z<=0){me.z=0;jumping=false;vy=0}}
+ saveMe(); renderPlayers(); requestAnimationFrame(loop);
+}
+loop();
 
-let online=(+localStorage.getItem("rublox_online")||0)+1;
-localStorage.setItem("rublox_online",online);
+playerNick.textContent=session.nick; playerUser.textContent="@"+session.username;
 
-document.getElementById("playerNick").textContent=user;
-document.getElementById("playersTop").innerHTML=`<div class="player-mini">🟢 Онлайн: ${online}</div>`;
-
-const esc=document.getElementById("escMenu");
-function toggleEsc(){esc.classList.toggle("show")}
-document.getElementById("escLogo").onclick=toggleEsc;
-document.addEventListener("keydown",e=>{if(e.key==="Escape")toggleEsc();});
-
-document.getElementById("restartBtn").onclick=()=>{player.style.left="50%";player.style.top="48%";}
-document.getElementById("leaveBtn").onclick=()=>location.href="/";
-
-const player=document.querySelector(".player3d");
-
-const bubble=document.createElement("div");
-bubble.style.cssText="position:absolute;top:-45px;left:-30px;background:white;color:black;padding:6px 10px;border-radius:14px;font-weight:700;display:none;min-width:100px;text-align:center";
-player.appendChild(bubble);
-
-let x=50,y=48;
+const keys={};
 document.addEventListener("keydown",e=>{
- if(e.key==="w")y-=1;
- if(e.key==="s")y+=1;
- if(e.key==="a")x-=1;
- if(e.key==="d")x+=1;
- player.style.left=x+"%";
- player.style.top=y+"%";
+ keys[e.key.toLowerCase()]=true;
+ if(e.code==="Space"&&!jumping){jumping=true;vy=15}
+ if(e.key==="Escape")escMenu.classList.toggle("show");
+ if(e.key==="Tab"){e.preventDefault();tabList.classList.toggle("show")}
 });
+document.addEventListener("keyup",e=>keys[e.key.toLowerCase()]=false);
+setInterval(()=>{
+ let speed=1.2;
+ if(keys["w"]||keys["ц"])me.y-=speed;
+ if(keys["s"]||keys["ы"])me.y+=speed;
+ if(keys["a"]||keys["ф"])me.x-=speed;
+ if(keys["d"]||keys["в"])me.x+=speed;
+ me.x=Math.max(3,Math.min(97,me.x)); me.y=Math.max(12,Math.min(92,me.y));
+},40);
 
-document.getElementById("chatOpen").onclick=()=>document.getElementById("chatBox").classList.toggle("show");
-
-const chat=document.getElementById("chatMessages");
-document.getElementById("chatInput").addEventListener("keydown",e=>{
- if(e.key==="Enter"&&e.target.value.trim()){
-   let txt=filterText(e.target.value);
-   chat.innerHTML+=`<p><b>${user}:</b> ${txt}</p>`;
-   bubble.innerText=txt;
-   bubble.style.display="block";
-   setTimeout(()=>bubble.style.display="none",4000);
-   e.target.value="";
+escLogo.onclick=()=>escMenu.classList.toggle("show");
+restartBtn.onclick=()=>{me.x=50;me.y=52;me.z=0};
+leaveBtn.onclick=()=>{localStorage.setItem("rublox_online_"+gameId,JSON.stringify(getOnline(gameId).filter(p=>p.id!==me.id)));location.href="/"};
+inventoryBtn.onclick=()=>itemsPanel.style.display=itemsPanel.style.display==="none"?"block":"none";
+chatOpen.onclick=()=>chatBox.classList.toggle("show");
+chatInput.addEventListener("keydown",e=>{
+ if(e.key==="Enter"&&chatInput.value.trim()){
+  const txt=filterText(chatInput.value.trim());
+  chatMessages.innerHTML+=`<p><b>${session.nick}:</b> ${txt}</p>`;
+  me.msg=txt; chatInput.value="";
+  setTimeout(()=>{me.msg=""},4000);
  }
 });
+window.addEventListener("beforeunload",()=>{localStorage.setItem("rublox_online_"+gameId,JSON.stringify(getOnline(gameId).filter(p=>p.id!==me.id)))});
