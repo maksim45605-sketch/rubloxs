@@ -1,19 +1,38 @@
 
-if(document.getElementById("regBtn")){
- regBtn.onclick=()=>{
-  const n=nick.value.trim(), u=username.value.trim(), p=pass.value.trim();
+import { db, doc, setDoc, getDoc, collection, query, where, getDocs, serverTimestamp } from "/firebase.js";
+import { setSession } from "/data.js";
+
+const regBtn=document.getElementById("regBtn");
+if(regBtn){
+ regBtn.onclick=async()=>{
+  const n=nick.value.trim(), u=username.value.trim().toLowerCase(), p=pass.value.trim();
   if(!n||!u||!p)return alert("Заполни ник, username и пароль");
-  const acc=getAccounts();
-  if(acc.some(a=>a.nick.toLowerCase()===n.toLowerCase()||a.username.toLowerCase()===u.toLowerCase()))return alert("Такой ник или username уже есть");
-  const user={nick:n,username:u,pass:p,rubux:0};
-  acc.push(user); saveAccounts(acc); setSession(user); location.href="/";
+  const nickQ=await getDocs(query(collection(db,"users"),where("nickLower","==",n.toLowerCase())));
+  if(!nickQ.empty)return alert("Такой ник уже есть");
+  const ref=doc(db,"users",u);
+  const old=await getDoc(ref);
+  if(old.exists())return alert("Такой username уже есть");
+  const user={nick:n,nickLower:n.toLowerCase(),username:u,pass:p,rubux:0,createdAt:Date.now()};
+  await setDoc(ref,user);
+  setSession({nick:n,username:u,rubux:0});
+  location.href="/";
  };
 }
-if(document.getElementById("loginBtn")){
- loginBtn.onclick=()=>{
-  const name=loginName.value.trim(), p=pass.value.trim();
-  const user=getAccounts().find(a=>(a.nick===name||a.username===name)&&a.pass===p);
-  if(!user)return alert("Аккаунт не найден или пароль неверный");
-  setSession(user); location.href="/";
+
+const loginBtn=document.getElementById("loginBtn");
+if(loginBtn){
+ loginBtn.onclick=async()=>{
+  const name=loginName.value.trim().toLowerCase(), p=pass.value.trim();
+  if(!name||!p)return alert("Введи ник/username и пароль");
+  let user=null;
+  const byUser=await getDoc(doc(db,"users",name));
+  if(byUser.exists()) user=byUser.data();
+  if(!user){
+   const q=await getDocs(query(collection(db,"users"),where("nickLower","==",name)));
+   if(!q.empty) user=q.docs[0].data();
+  }
+  if(!user || user.pass!==p)return alert("Аккаунт не найден или пароль неверный");
+  setSession({nick:user.nick,username:user.username,rubux:user.rubux||0});
+  location.href="/";
  };
 }
