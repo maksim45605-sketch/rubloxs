@@ -1,5 +1,5 @@
 export const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyCnzTl49Fj3SAF-ksft7IqsSPpFxzr0U-E",
   authDomain: "rubloxs.firebaseapp.com",
   projectId: "rubloxs",
   storageBucket: "rubloxs.firebasestorage.app",
