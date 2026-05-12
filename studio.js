@@ -1,59 +1,19 @@
-const scene = document.getElementById("scene");
-let selected = null;
-let count = 0;
 
-function select(el){
-  if(selected) selected.classList.remove("selected");
-  selected = el;
-  selected.classList.add("selected");
-  document.getElementById("selectedName").textContent = selected.dataset.name || "Object";
-}
-
-function makeObj(cls, name, text=""){
-  const el = document.createElement("div");
-  el.className = "obj " + cls;
-  el.dataset.name = name + " " + (++count);
-  el.textContent = text;
-  el.style.left = (80 + count*28) + "px";
-  el.style.top = (80 + count*18) + "px";
-  el.onclick = e => { e.stopPropagation(); select(el); };
-  scene.appendChild(el);
-  select(el);
-}
-
-document.getElementById("addPart").onclick = ()=>makeObj("part", "Part");
-document.getElementById("addFrame").onclick = ()=>makeObj("frame", "Frame");
-document.getElementById("addText").onclick = ()=>makeObj("textobj", "Text", document.getElementById("textValue").value || "Text");
-
-document.getElementById("toggleSelected").onclick = ()=>{
-  if(selected) selected.classList.toggle("off");
-};
-document.getElementById("colorPicker").oninput = e=>{
-  if(selected) selected.style.background = e.target.value;
-};
-document.getElementById("textValue").oninput = e=>{
-  if(selected && selected.classList.contains("textobj")) selected.textContent = e.target.value;
-};
-document.getElementById("runScript").onclick = ()=>{
-  try{ new Function(document.getElementById("scriptBox").value)(); alert("Скрипт выполнен"); }
-  catch(e){ alert("Ошибка скрипта: " + e.message); }
-};
-document.getElementById("clearScene").onclick = ()=>{
-  document.querySelectorAll(".obj").forEach(o=>o.remove());
-  selected = null;
-  document.getElementById("selectedName").textContent = "Ничего не выбрано";
-};
-document.getElementById("saveProject").onclick = ()=>{
-  const data = [...document.querySelectorAll(".obj")].map(o=>({name:o.dataset.name, cls:o.className, text:o.textContent, bg:o.style.background, left:o.style.left, top:o.style.top}));
-  localStorage.setItem("rublox_studio_project", JSON.stringify(data));
-  alert("Проект сохранён");
-};
-document.getElementById("fontUpload").onchange = e=>{
-  const file = e.target.files[0];
-  if(!file) return;
-  const url = URL.createObjectURL(file);
-  const style = document.createElement("style");
-  style.textContent = `@font-face{font-family:CustomRubloxFont;src:url(${url})} .scene,.scene *{font-family:CustomRubloxFont,Arial!important}`;
-  document.head.appendChild(style);
-};
-scene.onclick = ()=>{ if(selected) selected.classList.remove("selected"); selected=null; document.getElementById("selectedName").textContent="Ничего не выбрано"; };
+const start=document.getElementById("startModal"), scene=document.getElementById("scene");start.classList.add("show");
+let selected=null,count=0,drag=null,dx=0,dy=0;
+document.querySelectorAll("[data-template]").forEach(b=>b.onclick=()=>{start.classList.remove("show");scene.className="scene "+b.dataset.template;if(b.dataset.template==="long")makeObj("part long","Длинный Part");if(b.dataset.template==="square")makeObj("part square","Квадрат");if(b.dataset.template==="lobby"){makeObj("part long","Спавн");makeObj("frame","Портал");}});
+function select(el){if(selected)selected.classList.remove("selected");selected=el;selected.classList.add("selected");selectedName.textContent=selected.dataset.name;widthRange.value=parseInt(selected.style.width)||110;heightRange.value=parseInt(selected.style.height)||80;opacityRange.value=(parseFloat(selected.style.opacity||1)*100);}
+function makeObj(cls,name,text=""){const el=document.createElement("div");el.className="obj "+cls;el.dataset.name=name+" "+(++count);el.textContent=text;el.style.left=(90+count*25)+"px";el.style.top=(90+count*18)+"px";el.onmousedown=e=>{drag=el;dx=e.offsetX;dy=e.offsetY;select(el);};el.onclick=e=>{e.stopPropagation();select(el)};scene.appendChild(el);select(el);}
+document.onmousemove=e=>{if(!drag)return;const r=scene.getBoundingClientRect();drag.style.left=(e.clientX-r.left-dx)+"px";drag.style.top=(e.clientY-r.top-dy)+"px";};
+document.onmouseup=()=>drag=null;
+addPart.onclick=()=>makeObj("part","Part");addLong.onclick=()=>makeObj("part long","Длинный Part");addSquare.onclick=()=>makeObj("part square","Квадрат");addFrame.onclick=()=>makeObj("frame","Frame");addText.onclick=()=>makeObj("textobj","Text",textValue.value||"Text");
+toggleSelected.onclick=()=>{if(selected)selected.classList.toggle("off")};colorPicker.oninput=e=>{if(selected){if(selected.classList.contains("frame"))selected.style.borderColor=e.target.value;else selected.style.background=e.target.value;selected.style.color=e.target.value;}};
+widthRange.oninput=e=>{if(selected)selected.style.width=e.target.value+"px"};heightRange.oninput=e=>{if(selected)selected.style.height=e.target.value+"px"};opacityRange.oninput=e=>{if(selected)selected.style.opacity=e.target.value/100};
+textValue.oninput=e=>{if(selected&&selected.classList.contains("textobj"))selected.textContent=e.target.value};
+runScript.onclick=()=>{try{new Function(scriptBox.value)();alert("Скрипт выполнен")}catch(e){alert("Ошибка: "+e.message)}};
+clearScene.onclick=()=>document.querySelectorAll(".obj").forEach(o=>o.remove());
+saveProject.onclick=()=>{if((getUser()||"").startsWith("Guest")||!getUser())return alert("Гостям нельзя выкладывать игры");document.getElementById("saveModal").classList.add("show")};
+closeSave.onclick=()=>saveModal.classList.remove("show");
+finalSave.onclick=()=>{localStorage.setItem("rublox_saved_game",gameName.value||"Моя игра");alert("Игра сохранена");saveModal.classList.remove("show")};
+fontUpload.onchange=e=>{const file=e.target.files[0];if(!file)return;const url=URL.createObjectURL(file);const st=document.createElement("style");st.textContent=`@font-face{font-family:RubloxCustom;src:url(${url})}.scene,.scene *{font-family:RubloxCustom,Arial!important}`;document.head.appendChild(st)};
+scene.onclick=()=>{if(selected)selected.classList.remove("selected");selected=null;selectedName.textContent="Ничего не выбрано"};

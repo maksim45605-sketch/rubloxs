@@ -1,93 +1,11 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rublox — Game</title>
-  <link rel="stylesheet" href="/style.css" />
-</head>
+
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Rublox — Game</title><link rel="stylesheet" href="/style.css"></head>
 <body>
-<header class="topbar">
-  <a class="brand" href="/">
-    <img src="/assets/rublox.png" alt="Rublox">
-    <b>RUBLOX</b>
-  </a>
-  <nav>
-    <a href="/">Charts</a>
-    <a href="/marketplace.html">Marketplace</a>
-    <a href="/create.html">Create</a>
-    <a href="/rubux.html">Rubux</a>
-  </nav>
-  <div class="top-actions">
-    <input placeholder="Search">
-    <a class="btn green" href="/register.html">Sign Up</a>
-    <a class="btn" href="/login.html">Log In</a>
-  </div>
-</header>
-
+<header class="topbar"><a class="brand" href="/"><img src="/assets/rublox.png"><b>RUBLOX</b></a><nav class="nav"><a href="/">Графики</a><a href="/marketplace">Торговая площадка</a><a href="/create">Создать</a><a href="/rubux">Робукс</a></nav><div class="top-actions"><input placeholder="Поиск"><a class="btn green" href="/register">Регистрация</a><a class="btn" href="/login">Войти</a></div></header>
 <main class="game-page">
-  <section class="hero-game">
-    <img id="banner" class="game-banner" src="">
-    <div class="game-side">
-      <h1 id="title">Game</h1>
-      <p id="creator">By Rublox Studio ✅</p>
-      <p class="muted">Maturity: Mild</p>
-      <button id="playBtn" class="play-main">▶</button>
-      <div class="reactions">
-        <span>☆<small>Favorite</small></span>
-        <span>👍<small id="likes">0%</small></span>
-        <span>👤<small id="online">0</small></span>
-      </div>
-    </div>
-  </section>
-
-  <div class="tabs">
-    <button class="tab active" data-tab="about">About</button>
-    <button class="tab" data-tab="store">Store</button>
-    <button class="tab" data-tab="servers">Servers</button>
-  </div>
-
-  <section id="about" class="tab-body show">
-    <h2>Events</h2>
-    <div class="event-card">
-      <img id="eventImg" src="">
-      <div>
-        <b>Следующее обновление</b>
-        <p>Скоро будет...</p>
-        <button class="dark-btn">Notify Me</button>
-      </div>
-    </div>
-
-    <h2>Description</h2>
-    <p id="desc" class="desc"></p>
-
-    <div class="stats">
-      <div><b id="activeStat">0</b><span>Active</span></div>
-      <div><b>6 897 061</b><span>Favorites</span></div>
-      <div><b>17.8B+</b><span>Visits</span></div>
-      <div><b>15</b><span>Server Size</span></div>
-      <div><b>Action</b><span>Genre</span></div>
-    </div>
-
-    <h2>Badge</h2>
-    <div id="badges" class="badges-list"></div>
-  </section>
-
-  <section id="store" class="tab-body">
-    <h2>Store</h2>
-    <p class="muted">Тут будут предметы игры.</p>
-  </section>
-
-  <section id="servers" class="tab-body">
-    <h2>Servers</h2>
-    <button class="green wide">Join Random Server</button>
-  </section>
-
-  <h2>People Also Join</h2>
-  <div class="game-row" id="alsoGames"></div>
-</main>
-
-<script src="/data.js"></script>
-<script src="/game.js"></script>
-</body>
-</html>
+<section class="hero-game"><img id="banner" class="game-banner"><div class="game-side"><h1 id="title"></h1><p>By Rublox Studio ✅</p><p class="muted">Возраст: Mild</p><button id="playBtn" class="play-main">▶</button><div class="reactions"><span>☆<small>Избранное</small></span><span>👍<small id="likes"></small></span><span>👤<small id="online"></small></span></div></div></section>
+<div class="tabs"><button class="tab active" data-tab="about">Описание</button><button class="tab" data-tab="store">Магазин</button><button class="tab" data-tab="servers">Серверы</button></div>
+<section id="about" class="tab-body show"><h2>Описание</h2><p id="desc" class="desc"></p><div class="stats"><div><b id="activeStat"></b><span>Активно</span></div><div><b>18 250</b><span>Избранное</span></div><div><b>1.4M+</b><span>Посещений</span></div><div><b>20</b><span>Размер сервера</span></div><div><b>Sandbox</b><span>Жанр</span></div></div><h2>Бейджи</h2><div id="badges"></div></section>
+<section id="store" class="tab-body"><h2>Магазин</h2><p class="muted">Скоро тут будут вещи Bluckram.</p></section>
+<section id="servers" class="tab-body"><h2>Серверы</h2><button class="green wide">Войти на случайный сервер</button></section>
+</main><script src="/data.js"></script><script src="/game.js"></script></body></html>

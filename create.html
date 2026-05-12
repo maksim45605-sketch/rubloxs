@@ -1,67 +1,10 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rublox Studio</title>
-  <link rel="stylesheet" href="/style.css" />
-</head>
+
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Rublox Studio</title><link rel="stylesheet" href="/style.css"></head>
 <body>
-<header class="topbar dark">
-  <a class="brand" href="/">
-    <img src="/assets/rublox.png" alt="Rublox">
-    <b>RUBLOX STUDIO</b>
-  </a>
-  <nav>
-    <a href="/">Charts</a>
-    <a class="active" href="/create.html">Create</a>
-  </nav>
-  <div class="top-actions">
-    <button class="btn green" id="saveProject">Save</button>
-    <button class="btn" id="clearScene">Clear</button>
-  </div>
-</header>
-
-<main class="studio">
-  <aside class="panel">
-    <h2>Create</h2>
-    <button id="addPart">+ Part</button>
-    <button id="addFrame">+ Frame</button>
-    <button id="addText">+ Text</button>
-    <button id="toggleSelected">Вкл/Выкл</button>
-
-    <label>Цвет</label>
-    <input type="color" id="colorPicker" value="#00ff66">
-
-    <label>Текст</label>
-    <input id="textValue" placeholder="Text">
-
-    <label>Загрузить шрифт</label>
-    <input type="file" id="fontUpload" accept=".ttf,.otf,.woff,.woff2">
-
-    <label>Скрипт</label>
-    <textarea id="scriptBox" placeholder="console.log('Hello Rublox')"></textarea>
-    <button id="runScript">Run Script</button>
-  </aside>
-
-  <section class="viewport">
-    <div id="scene" class="scene">
-      <div class="grid-floor"></div>
-    </div>
-  </section>
-
-  <aside class="panel">
-    <h2>Properties</h2>
-    <p id="selectedName">Ничего не выбрано</p>
-    <small>Кликни по объекту, потом меняй цвет/текст/вкл.</small>
-    <hr>
-    <h3>3D Skin</h3>
-    <div class="skin-preview">
-      <div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div>
-    </div>
-  </aside>
-</main>
-
-<script src="/studio.js"></script>
-</body>
-</html>
+<header class="topbar dark"><a class="brand" href="/"><img src="/assets/rublox.png"><b>RUBLOX STUDIO</b></a><nav class="nav"><a href="/">Графики</a><a class="active" href="/create">Создать</a></nav><div class="top-actions"><button class="btn green" id="saveProject">Сохранить</button><button class="btn" id="clearScene">Очистить</button></div></header>
+<div class="save-modal" id="startModal"><div class="save-box"><h2>Выбери режим</h2><button data-template="flat">Плоский мир</button><button data-template="long">Длинный парт</button><button data-template="square">Квадрат</button><button data-template="grass">Трава</button><button data-template="lobby">Лобби</button></div></div>
+<main class="studio"><aside class="panel"><h2>Создание</h2><button id="addPart">+ Part</button><button id="addLong">+ Длинный Part</button><button id="addSquare">+ Квадрат</button><button id="addFrame">+ Frame</button><button id="addText">+ Text</button><button id="toggleSelected">Вкл/Выкл</button><label>Цвет</label><input type="color" id="colorPicker" value="#00ff66"><label>Ширина</label><input type="range" id="widthRange" min="30" max="400" value="110"><label>Высота</label><input type="range" id="heightRange" min="20" max="250" value="80"><label>Прозрачность</label><input type="range" id="opacityRange" min="0" max="100" value="100"><label>Текст</label><input id="textValue" placeholder="Текст"><label>Загрузить шрифт</label><input type="file" id="fontUpload" accept=".ttf,.otf,.woff,.woff2"><label>Скрипт</label><textarea id="scriptBox" placeholder="console.log('Rublox')"></textarea><button id="runScript">Запустить скрипт</button></aside>
+<section class="viewport"><div id="scene" class="scene"><div class="grid-floor"></div></div></section>
+<aside class="panel"><h2>Свойства</h2><p id="selectedName">Ничего не выбрано</p><small>Кликни по объекту. Двигать мышкой можно прямо на сцене.</small><hr><h3>3D скин</h3><div class="skin-preview"><div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div></aside></main>
+<div class="save-modal" id="saveModal"><div class="save-box"><h2>Сохранить игру</h2><input id="gameLogo" type="file" accept="image/*"><input id="gameBanner" type="file" accept="image/*"><input id="gameName" placeholder="Название"><textarea id="gameDesc" placeholder="Описание"></textarea><button class="green wide" id="finalSave">Сохранить</button><button class="wide" id="closeSave">Отмена</button></div></div>
+<script src="/data.js"></script><script src="/studio.js"></script></body></html>

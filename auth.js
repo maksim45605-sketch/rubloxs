@@ -1,29 +1,4 @@
-const guest = document.getElementById("guestBtn");
-if(guest){
-  guest.onclick = () => {
-    const nick = "Guest" + Math.floor(1000 + Math.random() * 8999);
-    localStorage.setItem("rublox_user", nick);
-    alert("Вы вошли как " + nick);
-    location.href = "/";
-  };
-}
-const reg = document.getElementById("regBtn");
-if(reg){
-  reg.onclick = () => {
-    const nick = document.getElementById("nick").value.trim();
-    if(!nick) return alert("Введи ник");
-    localStorage.setItem("rublox_user", nick);
-    alert("Аккаунт создан: " + nick);
-    location.href = "/";
-  };
-}
-const login = document.getElementById("loginBtn");
-if(login){
-  login.onclick = () => {
-    const email = document.getElementById("email").value.trim();
-    if(!email) return alert("Введи email");
-    localStorage.setItem("rublox_user", email.split("@")[0]);
-    alert("Вход выполнен");
-    location.href = "/";
-  };
-}
+
+const guest=document.getElementById("guestBtn");if(guest)guest.onclick=()=>{const n=guestName();setUser(n);location.href="/"};
+const reg=document.getElementById("regBtn");if(reg)reg.onclick=()=>{const n=nick.value.trim();if(!n)return alert("Введи ник");setUser(n);localStorage.setItem("rublox_last_nick_change",Date.now());location.href="/"};
+const login=document.getElementById("loginBtn");if(login)login.onclick=()=>{const e=email.value.trim();if(!e)return alert("Введи email");setUser(e.split("@")[0]);location.href="/"};

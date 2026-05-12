@@ -1,9 +1,45 @@
+
 const games = [
-  {id:"1", slug:"anime-battle", title:"Anime Battle", img:"https://picsum.photos/seed/anime/400/400", banner:"https://picsum.photos/seed/anime-banner/1200/600", online:"74.5K", likes:"96%", desc:"Тренируйтесь и сражайтесь с другими, чтобы стать самым сильным.", badges:["Шаги младенца","Сначала голова","Натуральный"]},
-  {id:"2", slug:"kick-a-lucky-block", title:"Kick a Lucky Block", img:"https://picsum.photos/seed/lucky/400/400", banner:"https://picsum.photos/seed/lucky-banner/1200/600", online:"194.2K", likes:"96%", desc:"Ломай лаки-блоки, получай предметы и прокачивай силу.", badges:["Первый блок","Редкий предмет","Супер удача"]},
-  {id:"3", slug:"slime-rng", title:"Slime RNG", img:"https://picsum.photos/seed/slime/400/400", banner:"https://picsum.photos/seed/slime-banner/1200/600", online:"196.9K", likes:"98%", desc:"Собирай слаймов, открывай редкости и фарми награды.", badges:["Обычный слайм","Мифический","RNG мастер"]},
-  {id:"4", slug:"mini-war", title:"Mini War", img:"https://picsum.photos/seed/war/400/400", banner:"https://picsum.photos/seed/war-banner/1200/600", online:"30.1K", likes:"97%", desc:"Мини-война с базами, танками и командными боями.", badges:["Первый бой","Командир","Победитель"]},
-  {id:"5", slug:"zombie-escape", title:"Zombie Escape", img:"https://picsum.photos/seed/zombie/400/400", banner:"https://picsum.photos/seed/zombie-banner/1200/600", online:"53.5K", likes:"90%", desc:"Выживай против зомби и убегай с карты.", badges:["Выживший","Охотник","Легенда"]},
-  {id:"6", slug:"rublox-simulator", title:"Rublox Simulator", img:"https://picsum.photos/seed/sim/400/400", banner:"https://picsum.photos/seed/sim-banner/1200/600", online:"142.9K", likes:"94%", desc:"Симулятор прокачки, питомцев и новых миров.", badges:["Новичок","Прокачка","Миллионер"]}
+  {
+    id:"1",
+    slug:"bluckram",
+    title:"Bluckram",
+    img:"https://picsum.photos/seed/bluckram-logo/400/400",
+    banner:"https://picsum.photos/seed/bluckram-banner/1200/600",
+    online:"1.2K",
+    likes:"98%",
+    desc:"Плоский мир, скины, чат, ники сверху и простой режим для игры с друзьями.",
+    badges:["Первый вход","Открыл чат","Вернулся на спавн"]
+  }
 ];
 function gameUrl(g){ return "/game/" + g.id + "/" + g.slug + "/"; }
+function getUser(){
+  return localStorage.getItem("rublox_user") || "";
+}
+function setUser(name){
+  localStorage.setItem("rublox_user", name);
+}
+function guestName(){
+  return "Guest" + Math.floor(1000 + Math.random()*8999);
+}
+function renderHeaderUser(){
+  const actions = document.querySelector(".top-actions");
+  if(!actions) return;
+  const user = getUser();
+  if(!user) return;
+  actions.innerHTML = `
+    <div class="user-chip" id="userChip">
+      <div class="avatar-head"></div>
+      <b>${user}</b>
+    </div>
+    <div class="dropdown" id="userDrop">
+      <a href="/profile">Профиль</a>
+      <a href="/settings">Настройки</a>
+      <a href="/create">Создать игру</a>
+      <button id="logoutBtn">Выйти</button>
+    </div>
+  `;
+  document.getElementById("userChip").onclick = () => document.getElementById("userDrop").classList.toggle("show");
+  document.getElementById("logoutBtn").onclick = () => { localStorage.removeItem("rublox_user"); location.href="/"; };
+}
+document.addEventListener("DOMContentLoaded", renderHeaderUser);
