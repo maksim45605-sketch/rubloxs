@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rublox Studio</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<header class="topbar dark">
+  <a class="brand" href="/">
+    <img src="/assets/rublox.png" alt="Rublox">
+    <b>RUBLOX STUDIO</b>
+  </a>
+  <nav>
+    <a href="/">Charts</a>
+    <a class="active" href="/create.html">Create</a>
+  </nav>
+  <div class="top-actions">
+    <button class="btn green" id="saveProject">Save</button>
+    <button class="btn" id="clearScene">Clear</button>
+  </div>
+</header>
+
+<main class="studio">
+  <aside class="panel">
+    <h2>Create</h2>
+    <button id="addPart">+ Part</button>
+    <button id="addFrame">+ Frame</button>
+    <button id="addText">+ Text</button>
+    <button id="toggleSelected">Вкл/Выкл</button>
+
+    <label>Цвет</label>
+    <input type="color" id="colorPicker" value="#00ff66">
+
+    <label>Текст</label>
+    <input id="textValue" placeholder="Text">
+
+    <label>Загрузить шрифт</label>
+    <input type="file" id="fontUpload" accept=".ttf,.otf,.woff,.woff2">
+
+    <label>Скрипт</label>
+    <textarea id="scriptBox" placeholder="console.log('Hello Rublox')"></textarea>
+    <button id="runScript">Run Script</button>
+  </aside>
+
+  <section class="viewport">
+    <div id="scene" class="scene">
+      <div class="grid-floor"></div>
+    </div>
+  </section>
+
+  <aside class="panel">
+    <h2>Properties</h2>
+    <p id="selectedName">Ничего не выбрано</p>
+    <small>Кликни по объекту, потом меняй цвет/текст/вкл.</small>
+    <hr>
+    <h3>3D Skin</h3>
+    <div class="skin-preview">
+      <div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div>
+    </div>
+  </aside>
+</main>
+
+<script src="/studio.js"></script>
+</body>
+</html>
